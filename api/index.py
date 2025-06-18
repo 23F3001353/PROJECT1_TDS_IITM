@@ -687,43 +687,7 @@ async def query_knowledge_base(request: QueryRequest):
 # Health check endpoint
 @app.get("/health")
 async def health_check():
-    try:
-        # Try to connect to the database as part of health check
-        conn = sqlite3.connect(DB_PATH)
-        cursor = conn.cursor()
-        
-        # Check if tables exist and have data
-        cursor.execute("SELECT COUNT(*) FROM discourse_chunks")
-        discourse_count = cursor.fetchone()[0]
-        
-        cursor.execute("SELECT COUNT(*) FROM markdown_chunks")
-        markdown_count = cursor.fetchone()[0]
-        
-        # Check if any embeddings exist
-        cursor.execute("SELECT COUNT(*) FROM discourse_chunks WHERE embedding IS NOT NULL")
-        discourse_embeddings = cursor.fetchone()[0]
-        
-        cursor.execute("SELECT COUNT(*) FROM markdown_chunks WHERE embedding IS NOT NULL")
-        markdown_embeddings = cursor.fetchone()[0]
-        
-        conn.close()
-        
-        return {
-            "status": "healthy", 
-            "database": "connected", 
-            "api_key_set": bool(API_KEY),
-            "discourse_chunks": discourse_count,
-            "markdown_chunks": markdown_count,
-            "discourse_embeddings": discourse_embeddings,
-            "markdown_embeddings": markdown_embeddings
-        }
-    except Exception as e:
-        logger.error(f"Health check failed: {e}")
-        return JSONResponse(
-            status_code=500,
-            content={"status": "unhealthy", "error": str(e), "api_key_set": bool(API_KEY)}
-        )
-
+    return {"status": "ok"}
 # app.py in api/
 app = app
 # Vercel expects a top-level variable named `app`
