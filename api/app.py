@@ -725,4 +725,5 @@ async def health_check():
         )
 
 # app.py in api/
-app = app  # Vercel expects a top-level variable named `app`
+app = app
+# Vercel expects a top-level variable named `app`
